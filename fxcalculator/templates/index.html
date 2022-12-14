@@ -1,0 +1,122 @@
+{% load static %}
+<!DOCTYPE html>
+<title>
+Python FX Calculator</title>
+
+    <head>
+        <title>FX Converter</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <!-- Javascript -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+    <style>
+    
+    html {
+      font-size: 20px;
+    }
+    
+    .panel {
+      background: #333333;
+      border: solid white;
+    }
+    
+    .results {
+      font-size: 1em;
+      color: #FFFFFF;
+    }
+    
+    .dropdown {
+      margin-bottom: 50px;
+    }
+    
+    .inline-block {
+      display: inline-block;
+    }
+    
+    .center {
+      width: 90%;
+      margin: 0 auto 30px;
+    }
+    .label{
+      color:white;
+    }
+    </style>
+    
+    </head>
+    
+    <body>
+    <br>
+    <br>
+    <br>
+    <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+          <div class="panel panel-primary text-center">
+            <div class="panel-heading">
+              <h4 class="panel-title">FX Converter</h4>
+            </div>
+            <div class="error">
+              Please enter numeric value
+            </div>
+            <div class="panel-body">
+              <form class="form-vertical" id='currency_form'>
+    
+                <div class="form-group center">
+                  <label for="" class="label">Enter Value:</label>
+                  <input id='convert_from_val' name='convert_from_val' type="number" class="amount form-control"
+                   placeholder="Enter value" min="1" required>
+                </div>
+    
+    
+                <div class="form-group inline-block">
+                  <label for="" class="label">From currency:</label>
+                  <select class="currency-list form-control" name='convert_from' id='convert_from' required>
+                    <option >--Select--</option>
+                    {% for i in currency %}
+                    <option value='{{i}}'>{{i}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+    
+                <div class="form-group inline-block">
+                  <label class="label">To currency:</label>
+                  <select class="currency-list form-control" name='convert_to' id='convert_to' required>
+                    <option >--Select--</option>
+                    {% for i in currency %}
+                    <option value='{{i}}'>{{i}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="form-group center">
+                  <button id='submit' class='btn btn-primary' > Convert </button>
+                </div>
+              </form>
+              <p class="results label"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js'></script>
+    <script>
+     $('#submit').on('click', function(e){
+        e.preventDefault();
+          $.ajax({
+              type: 'POST',
+              url: 'http://127.0.0.1:8000',
+              data:$('#currency_form').serialize(),
+              success: function(resultData) { 
+                $('.results').html(resultData['msg']+ 'From '+ $('#convert_from').val()+' / '+$('#convert_to').val()+' is : '+resultData['result'])
+              }
+          });
+      })
+    </script>
+    </body>
+</html>
